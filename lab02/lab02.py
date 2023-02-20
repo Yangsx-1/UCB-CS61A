@@ -15,7 +15,7 @@ def lambda_curry2(func):
     3
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return lambda x: lambda y: func(x, y)
 
 
 
@@ -47,6 +47,14 @@ def count_cond(condition):
     8
     """
     "*** YOUR CODE HERE ***"
+    def round_execute(n):
+        i, count = 1, 0
+        while i <= n:
+            if condition(n, i):
+                count += 1
+            i += 1
+        return count
+    return round_execute
 
 
 
@@ -82,6 +90,14 @@ def composite_identity(f, g):
     False
     """
     "*** YOUR CODE HERE ***"
+    tmp_gf = lambda x: g(f(x))
+    tmp_fg = lambda x: f(g(x))
+    def inverse_right(n):
+        if tmp_gf(n) == tmp_fg(n):
+            return True
+        else:
+            return False
+    return inverse_right
 
 
 
@@ -94,8 +110,8 @@ def cycle(f1, f2, f3):
     ...     return x * 2
     >>> def add3(x):
     ...     return x + 3
-    >>> my_cycle = cycle(add1, times2, add3)
-    >>> identity = my_cycle(0)
+    >>> my_cycle = cycle(add1, times2, add3)#the first function
+    >>> identity = my_cycle(0)#the second function
     >>> identity(5)
     5
     >>> add_one_then_double = my_cycle(2)
@@ -112,4 +128,14 @@ def cycle(f1, f2, f3):
     19
     """
     "*** YOUR CODE HERE ***"
-
+    def mycycle(n):
+        def cyclef(x):
+            i = 0
+            funclist = [f1, f2, f3]
+            while i < n:
+                tmpf = funclist[i % 3]
+                x = tmpf(x)
+                i += 1
+            return x
+        return cyclef
+    return mycycle
