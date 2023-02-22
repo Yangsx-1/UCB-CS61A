@@ -29,6 +29,16 @@ def ordered_digits(x):
 
     """
     "*** YOUR CODE HERE ***"
+    last = 10
+    if_non_decreasing = True
+    while x > 0:
+        x_last = x % 10
+        if x_last > last:
+            if_non_decreasing = False
+            break
+        last = x_last
+        x = x // 10
+    return if_non_decreasing
 
 
 def get_k_run_starter(n, k):
@@ -52,12 +62,12 @@ def get_k_run_starter(n, k):
     """
     i = 0
     final = None
-    while ____________________________:
-        while ____________________________:
-            ____________________________
-        final = ____________________________
-        i = ____________________________
-        n = ____________________________
+    while i <= k:
+        while n % 10 == (n // 10) % 10 + 1 and n // 10 != 0:
+            n = n // 10;
+        final = n % 10
+        i = i + 1
+        n = n // 10
     return final
 
 
