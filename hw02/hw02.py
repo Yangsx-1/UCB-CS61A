@@ -23,6 +23,16 @@ def num_eights(x):
     True
     """
     "*** YOUR CODE HERE ***"
+    if x < 10:#x个位数
+        if x == 8:
+            return 1
+        else:
+            return 0
+    else:#不是个位数
+        if x % 10 == 8:
+            return 1 + num_eights(x // 10)
+        else:
+            return num_eights(x // 10)
 
 
 def pingpong(n):
@@ -58,6 +68,17 @@ def pingpong(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    def helper(index):
+        if index == 1:
+            return 1
+        elif index % 8 == 0 or num_eights(index) != 0:
+            return -helper(index - 1)
+        else:
+            return helper(index - 1)
+    if n == 1:
+        return 1
+    else:
+        return pingpong(n - 1) + helper(n - 1)
 
 
 def missing_digits(n):
@@ -88,6 +109,12 @@ def missing_digits(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n < 10:
+        return 0
+    elif n % 10 != n // 10 % 10:
+        return missing_digits(n // 10) + (n % 10 - n // 10 % 10) - 1
+    else:
+        return missing_digits(n // 10)
 
 
 def next_largest_coin(coin):
@@ -124,6 +151,16 @@ def count_coins(total):
     True
     """
     "*** YOUR CODE HERE ***"
+    def helper(n, m):
+        if n == 0:#只有等于0的时候才能刚好减完，才算一种组合
+            return 1
+        elif n < 0:#中间至少有一步减多了，不能为一种组合
+            return 0
+        elif m == None:#n>0但已经没有更大的m能让他减，应走其他分支
+            return 0
+        else:
+            return helper(n-m, m) + helper(n, next_largest_coin(m))
+    return helper(total, 1)
 
 
 from operator import sub, mul
@@ -138,5 +175,5 @@ def make_anonymous_factorial():
     >>> check(HW_SOURCE_FILE, 'make_anonymous_factorial', ['Assign', 'AugAssign', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
-
+    return (lambda g: lambda x: g(g, x))(lambda f,n: 1 if n == 1 else n * f(f, n - 1))
+    #https://blog.csdn.net/qq_42103298/article/details/123773235
