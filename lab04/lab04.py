@@ -19,6 +19,10 @@ def skip_add(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n <= 0:
+        return 0
+    else:
+        return n + skip_add(n - 2)
 
 
 def summation(n, term):
@@ -41,6 +45,10 @@ def summation(n, term):
     """
     assert n >= 1
     "*** YOUR CODE HERE ***"
+    if n == 1:
+        return term(1)
+    else:
+        return term(n) + summation(n - 1, term)
 
 
 def paths(m, n):
@@ -57,6 +65,16 @@ def paths(m, n):
     1
     """
     "*** YOUR CODE HERE ***"
+    def num_path(x, y):
+        if x == m and y == n:
+            return 1
+        elif x == m:
+            return num_path(x, y + 1)
+        elif y == n:
+            return num_path(x + 1, y)
+        else:
+            return num_path(x + 1,y) + num_path(x, y + 1)
+    return num_path(1, 1)
 
 
 
@@ -105,6 +123,12 @@ def max_subseq(n, t):
     5
     """
     "*** YOUR CODE HERE ***"
+    if t == 0:
+        return 0
+    elif n < 10:
+        return n
+    else:#选最右边的数或不选最右边的数
+        return max(max_subseq(n // 10, t - 1) * 10 + n % 10, max_subseq(n // 10, t))
 
 
 def add_chars(w1, w2):
@@ -134,4 +158,13 @@ def add_chars(w1, w2):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    def check_same(x, y):
+        if x == len(w1) and y == len(w2):
+            return ''
+        elif x == len(w1):
+            return w2[y] + check_same(x, y + 1)
+        elif w1[x] != w2[y]:
+            return w2[y] + check_same(x, y + 1)
+        else:
+            return check_same(x + 1, y + 1)
+    return check_same(0, 0)
