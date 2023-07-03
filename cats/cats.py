@@ -16,7 +16,14 @@ def choose(paragraphs, select, k):
     the empty string.
     """
     # BEGIN PROBLEM 1
-    "*** YOUR CODE HERE ***"
+    result_list = []
+    for para in paragraphs:
+        if select(para):
+            result_list.append(para)
+    if k < len(result_list):
+        return result_list[k]
+    else:
+        return ''
     # END PROBLEM 1
 
 
