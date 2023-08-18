@@ -136,24 +136,27 @@ def shifty_shifts(start, goal, limit):
 
 def pawssible_patches(start, goal, limit):
     """A diff function that computes the edit distance from START to GOAL."""
-    assert False, 'Remove this line'
+    # assert False, 'Remove this line'
 
-    if ______________: # Fill in the condition
+    if limit < 0: # Fill in the condition
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return 0
         # END
 
-    elif ___________: # Feel free to remove or add additional cases
+    elif len(start) == 0 or len(goal) == 0: # Feel free to remove or add additional cases
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return len(start) + len(goal)
         # END
 
+    elif start[0] == goal[0]:
+        return pawssible_patches(start[1:], goal[1:], limit)
+    
     else:
-        add_diff = ... # Fill in these lines
-        remove_diff = ...
-        substitute_diff = ...
+        add_diff = 1 + pawssible_patches(start, goal[1:], limit - 1) # Fill in these lines
+        remove_diff = 1 + pawssible_patches(start[1:], goal, limit - 1)
+        substitute_diff = 1 + pawssible_patches(start[1:], goal[1:], limit - 1)
         # BEGIN
-        "*** YOUR CODE HERE ***"
+        return min(add_diff, remove_diff, substitute_diff)
         # END
 
 
@@ -170,7 +173,15 @@ def final_diff(start, goal, limit):
 def report_progress(typed, prompt, user_id, send):
     """Send a report of your id and progress so far to the multiplayer server."""
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    right = 0
+    for i in range(len(typed)):
+        if typed[i] == prompt[i]:
+            right += 1
+        else:
+            break
+    score = right / len(prompt)
+    send({'id':user_id, 'progress':score})
+    return score
     # END PROBLEM 8
 
 
@@ -196,7 +207,13 @@ def time_per_word(times_per_player, words):
         words: a list of words, in the order they are typed.
     """
     # BEGIN PROBLEM 9
-    "*** YOUR CODE HERE ***"
+    consume_time = []
+    for l in times_per_player:
+        t = []
+        for i in range(len(l) - 1):
+            t.append(l[i + 1] - l[i])
+        consume_time.append(t)
+    return game(words, consume_time)
     # END PROBLEM 9
 
 
@@ -211,7 +228,14 @@ def fastest_words(game):
     player_indices = range(len(all_times(game)))  # contains an *index* for each player
     word_indices = range(len(all_words(game)))    # contains an *index* for each word
     # BEGIN PROBLEM 10
-    "*** YOUR CODE HERE ***"
+    fastest_words_list = [[] for i in player_indices]
+    for word_index in word_indices:
+        fastest_player_so_far, best_time_so_far = 0, time(game, 0, word_index)
+        for player_index in player_indices:
+            if time(game, player_index, word_index) < best_time_so_far:
+                fastest_player_so_far, best_time_so_far = player_index, time(game, player_index, word_index)
+        fastest_words_list[fastest_player_so_far].append(word_at(game, word_index))
+    return fastest_words_list
     # END PROBLEM 10
 
 
