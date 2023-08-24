@@ -254,7 +254,7 @@ def coords(fn, seq, lower, upper):
     [[-2, 4], [1, 1], [3, 9]]
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return [[x, fn(x)] for x in seq if fn(x) >= lower and fn(x) <= upper]
 
 
 def riffle(deck):
@@ -267,7 +267,7 @@ def riffle(deck):
     [0, 10, 1, 11, 2, 12, 3, 13, 4, 14, 5, 15, 6, 16, 7, 17, 8, 18, 9, 19]
     """
     "*** YOUR CODE HERE ***"
-    return _______
+    return [deck[(i % 2) * (len(deck) // 2) + i // 2] for i in range(len(deck))]
 
 
 def add_trees(t1, t2):
@@ -305,7 +305,19 @@ def add_trees(t1, t2):
         5
       5
     """
-    "*** YOUR CODE HERE ***"
+    # they might have branches, but they both must have label
+    res_label = label(t1) + label(t2)
+    # for each corresponding branch, add them tgt
+    res_branch = []
+    for b1, b2 in zip(branches(t1), branches(t2)):  # go through only the branches appearing in both t1 and t2
+        new_branch = add_trees(b1, b2)
+        res_branch += [new_branch]  # remember to add []
+    # where t1 or t2 is empty: no need to add, just need to include
+    i = len(res_branch)  # important to add
+    res_branch += branches(t1)[i:]
+    res_branch += branches(t2)[i:]
+    # return the new tree
+    return tree(res_label, res_branch)
 
 
 def build_successors_table(tokens):
@@ -326,8 +338,9 @@ def build_successors_table(tokens):
     prev = '.'
     for word in tokens:
         if prev not in table:
-            "*** YOUR CODE HERE ***"
-        "*** YOUR CODE HERE ***"
+            table[prev] = [word]
+        else:
+            table[prev].append(word)
         prev = word
     return table
 
@@ -344,7 +357,8 @@ def construct_sent(word, table):
     import random
     result = ''
     while word not in ['.', '!', '?']:
-        "*** YOUR CODE HERE ***"
+        result += word + ' '
+        word = random.choice(table[word])
     return result.strip() + word
 
 def shakespeare_tokens(path='shakespeare.txt', url='http://composingprograms.com/shakespeare.txt'):
