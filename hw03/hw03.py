@@ -113,9 +113,6 @@ def balanced(m):
         elif is_planet(end(left(m))):
             if not balanced(end(right((m)))):
                 return False
-        elif is_planet(end(left(m))):
-            if not balanced(end(right((m)))):
-                return False
         else:
             for i in [left(m), right(m)]:
                 if not balanced(end(i)):
