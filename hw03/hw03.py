@@ -204,6 +204,10 @@ def preorder(t):
     [2, 4, 6]
     """
     "*** YOUR CODE HERE ***"
+    nodes = [label(t)]
+    for branch in branches(t):
+        nodes += preorder(branch)
+    return nodes
 
 
 def has_path(t, word):
